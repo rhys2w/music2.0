@@ -7,6 +7,10 @@ set :database, "sqlite3:///twitter_users_new.sqlite3"
 
 require './models.rb'
 
+require 'bcrypt'
+
+require 'carrierwave'
+
 get '/' do
 	haml :landing
 end
@@ -19,7 +23,7 @@ post '/sign_in' do
   if
     @user = User.where(:username => params[:username]).first
     if @user.password == params[:password]
-      redirect '/profile' + @user.id.to_s
+      redirect '/profile/' + @user.id.to_s
     else
       params[:alert] = "Your password was wrong."
       redirect '/'
@@ -50,5 +54,13 @@ end
 
 get '/profile/:id' do
   @user = User.find(params[:id])
+  @uploads = Upload.all
   haml :profile
+end
+
+post 'profile/:id' do
+  upload = Upload.new
+  upload.file = params[:image]
+  upload.save
+  redirect '/profile'
 end

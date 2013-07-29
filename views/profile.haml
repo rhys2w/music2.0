@@ -19,9 +19,13 @@
                   \   Welcome 
             %h3 What are you listening to?
             %br 
+            %form{:action => "/profile", :method => "post", :enctype => "multipart/form-data"}
+              %input{:type => "file", :name => "music"}
+              %input{:type => "submit", :name => "submit", :value => "Upload"}
 
-
-
+            -@uploads.each do |upload|
+              %img{:src => upload.file.url}
+            
              
 
                
